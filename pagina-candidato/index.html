@@ -1,0 +1,846 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Entrevista técnica</title>
+<style>
+:root {
+  --fondo: #f6f5f2;
+  --superficie: #ffffff;
+  --borde: #e3e0d8;
+  --texto: #1c1f26;
+  --suave: #5b6070;
+  --tenue: #8a8f9c;
+  --primario: #1f3a8a;
+  --primario-hover: #172c6b;
+  --primario-claro: #e8edf9;
+  --exito: #15803d;
+  --exito-claro: #e7f5ec;
+  --alerta: #b45309;
+  --alerta-claro: #fdf3e2;
+  --peligro: #b91c1c;
+  --peligro-claro: #fbeaea;
+  --radio: 10px;
+  --sombra: 0 1px 2px rgba(20, 24, 33, .06), 0 4px 16px rgba(20, 24, 33, .05);
+  --fuente: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--fondo);
+  color: var(--texto);
+  font-family: var(--fuente);
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3 { line-height: 1.25; margin: 0 0 .5em; letter-spacing: -.01em; }
+h1 { font-size: 26px; }
+h2 { font-size: 20px; }
+h3 { font-size: 16px; }
+p { margin: 0 0 .9em; }
+a { color: var(--primario); }
+.oculto { display: none !important; }
+.suave { color: var(--suave); }
+.tenue { color: var(--tenue); font-size: 13px; }
+.mono { font-family: var(--mono); font-size: 13px; }
+
+.tarjeta {
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+  padding: 28px;
+}
+
+.btn {
+  appearance: none;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 10px 18px;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  background: var(--primario);
+  color: #fff;
+  transition: background .15s, opacity .15s;
+}
+.btn:hover:not(:disabled) { background: var(--primario-hover); }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.btn.secundario { background: var(--superficie); color: var(--texto); border-color: var(--borde); }
+.btn.secundario:hover:not(:disabled) { background: #f0eee9; }
+.btn.exito { background: var(--exito); }
+.btn.peligro { background: var(--superficie); color: var(--peligro); border-color: #efc9c9; }
+.btn.chico { padding: 6px 12px; font-size: 13px; }
+
+label { display: block; font-weight: 600; font-size: 13px; margin: 0 0 6px; }
+input[type=text], input[type=email], input[type=password], select, textarea {
+  width: 100%;
+  font: inherit;
+  color: inherit;
+  background: #fff;
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  padding: 10px 12px;
+  outline: none;
+  transition: border-color .15s, box-shadow .15s;
+}
+input:focus, select:focus, textarea:focus { border-color: var(--primario); box-shadow: 0 0 0 3px var(--primario-claro); }
+textarea { resize: vertical; min-height: 120px; }
+.campo { margin-bottom: 16px; }
+
+.insignia {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: #eceae4;
+  color: var(--suave);
+  white-space: nowrap;
+}
+.insignia.azul { background: var(--primario-claro); color: var(--primario); }
+.insignia.verde { background: var(--exito-claro); color: var(--exito); }
+.insignia.ambar { background: var(--alerta-claro); color: var(--alerta); }
+.insignia.roja { background: var(--peligro-claro); color: var(--peligro); }
+
+.aviso {
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 14px;
+  background: var(--primario-claro);
+  color: #1e2f63;
+  margin-bottom: 16px;
+}
+.aviso.ambar { background: var(--alerta-claro); color: #7a3d06; }
+.aviso.rojo { background: var(--peligro-claro); color: #7f1414; }
+.aviso.verde { background: var(--exito-claro); color: #0f5229; }
+
+.girando {
+  width: 18px; height: 18px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  vertical-align: -3px;
+  animation: girar .8s linear infinite;
+}
+@keyframes girar { to { transform: rotate(360deg); } }
+</style>
+<style>
+  body { min-height: 100vh; }
+  .marco { max-width: 760px; margin: 0 auto; padding: 40px 20px 60px; }
+  .marca { font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--tenue); margin-bottom: 18px; }
+  .pasos { display: flex; gap: 6px; margin-bottom: 22px; }
+  .pasos span { flex: 1; height: 4px; border-radius: 4px; background: var(--borde); }
+  .pasos span.hecho { background: var(--primario); }
+  .reglas { list-style: none; padding: 0; margin: 0 0 20px; display: grid; gap: 10px; }
+  .reglas li { display: grid; grid-template-columns: 26px 1fr; gap: 10px; align-items: start; }
+  .reglas li b.n { width: 26px; height: 26px; border-radius: 50%; background: var(--primario-claro); color: var(--primario); display: grid; place-items: center; font-size: 13px; }
+  .datos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 0 0 22px; }
+  .datos div { background: var(--fondo); border-radius: 8px; padding: 12px; }
+  .datos strong { display: block; font-size: 22px; }
+  .datos span { font-size: 12px; color: var(--suave); }
+  .consent { max-height: 260px; overflow: auto; font-size: 13.5px; border: 1px solid var(--borde); border-radius: 8px; padding: 14px 16px; background: #fcfcfa; margin-bottom: 14px; }
+  .check { display: flex; gap: 10px; align-items: flex-start; font-weight: 500; font-size: 14px; cursor: pointer; }
+  .check input { margin-top: 4px; width: 17px; height: 17px; }
+  .acciones { display: flex; gap: 10px; justify-content: flex-end; margin-top: 22px; flex-wrap: wrap; }
+  .camara-prueba { display: grid; grid-template-columns: 240px 1fr; gap: 20px; align-items: start; }
+  .camara-prueba video { width: 240px; aspect-ratio: 4/3; background: #111; border-radius: 8px; object-fit: cover; transform: scaleX(-1); }
+  .verif { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; font-size: 14px; }
+  .verif li::before { content: "•"; margin-right: 8px; color: var(--tenue); }
+  .verif li.ok::before { content: "✓"; color: var(--exito); font-weight: 700; }
+  .verif li.mal::before { content: "✕"; color: var(--peligro); font-weight: 700; }
+
+  /* Entrevista */
+  body.en-entrevista { background: #fff; user-select: none; -webkit-user-select: none; }
+  body.en-entrevista textarea { user-select: text; -webkit-user-select: text; }
+  .barra { position: sticky; top: 0; z-index: 5; background: #fff; border-bottom: 1px solid var(--borde); }
+  .barra-int { max-width: 860px; margin: 0 auto; padding: 12px 20px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .progreso { flex: 1; min-width: 140px; }
+  .progreso .riel { height: 6px; background: var(--borde); border-radius: 6px; overflow: hidden; margin-top: 6px; }
+  .progreso .riel i { display: block; height: 100%; background: var(--primario); transition: width .3s; }
+  .reloj { font-family: var(--mono); font-size: 20px; font-weight: 700; padding: 4px 12px; border-radius: 8px; background: var(--fondo); min-width: 86px; text-align: center; }
+  .reloj.poco { background: var(--alerta-claro); color: var(--alerta); }
+  .reloj.critico { background: var(--peligro-claro); color: var(--peligro); }
+  .zona { max-width: 860px; margin: 0 auto; padding: 32px 20px 120px; }
+  .pregunta { font-size: 19px; line-height: 1.6; font-weight: 500; margin: 10px 0 22px; white-space: pre-wrap; }
+  .respuesta { min-height: 300px; font-size: 16px; line-height: 1.6; }
+  .pie-resp { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; gap: 12px; flex-wrap: wrap; }
+  .mini-cam { position: fixed; right: 16px; bottom: 16px; width: 150px; aspect-ratio: 4/3; border-radius: 8px; object-fit: cover; transform: scaleX(-1); background: #111; box-shadow: var(--sombra); z-index: 6; }
+  .rec { position: fixed; right: 24px; bottom: 132px; z-index: 7; font-size: 11px; font-weight: 700; color: #fff; background: rgba(185, 28, 28, .9); padding: 2px 8px; border-radius: 999px; }
+  .rec::before { content: "●"; margin-right: 4px; animation: parpadeo 1.2s infinite; }
+  @keyframes parpadeo { 50% { opacity: .3; } }
+
+  .velo { position: fixed; inset: 0; background: rgba(20, 24, 33, .78); z-index: 20; display: grid; place-items: center; padding: 20px; }
+  .velo .tarjeta { max-width: 460px; text-align: center; }
+  @media (max-width: 640px) {
+    .datos { grid-template-columns: 1fr; }
+    .camara-prueba { grid-template-columns: 1fr; }
+    .camara-prueba video { width: 100%; }
+    .mini-cam { width: 96px; }
+    .rec { bottom: 96px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="vista-carga" class="marco"><p class="suave"><span class="girando"></span>&nbsp; Cargando tu entrevista…</p></div>
+
+<div id="vista-error" class="marco oculto">
+  <div class="tarjeta"><h2>No pudimos abrir la entrevista</h2><p id="error-texto" class="suave"></p></div>
+</div>
+
+<!-- Paso 1: bienvenida -->
+<div id="vista-bienvenida" class="marco oculto">
+  <div class="marca" data-empresa></div>
+  <div class="pasos"><span class="hecho"></span><span></span><span></span><span></span></div>
+  <div class="tarjeta">
+    <h1>Hola, <span data-candidato></span></h1>
+    <p class="suave">Esta es la entrevista técnica para la vacante <b data-vacante></b>. Te la hace un agente de evaluación: te mostrará una pregunta a la vez y tú respondes por escrito. No es un chat, así que no recibirás respuestas ni retroalimentación durante la prueba.</p>
+    <div class="datos">
+      <div><strong data-total></strong><span>preguntas en total</span></div>
+      <div><strong data-tecnicas></strong><span>técnicas · <span data-min-tec></span> min c/u</span></div>
+      <div><strong data-blandas></strong><span>de habilidades blandas · <span data-min-bla></span> min c/u</span></div>
+    </div>
+    <h3>Antes de empezar, ten en cuenta</h3>
+    <ul class="reglas">
+      <li><b class="n">1</b><span>Hazla en un computador con cámara, en <b>Google Chrome o Microsoft Edge</b>, en un lugar tranquilo y con buena conexión.</span></li>
+      <li><b class="n">2</b><span>La entrevista se hace <b>en un solo intento</b> y en <b>pantalla completa</b>. Se graba tu cámara y micrófono mientras respondes (un video por pregunta).</span></li>
+      <li><b class="n">3</b><span>No puedes salir de la ventana, cambiar de pestaña, copiar ni pegar texto. Cada intento queda registrado como incidencia. Si superas <b data-max></b> incidencias, la sesión se anula.</span></li>
+      <li><b class="n">4</b><span>Cada pregunta tiene su propio tiempo. Cuando se acaba, tu respuesta se envía tal como esté y pasas a la siguiente. No puedes volver atrás.</span></li>
+      <li><b class="n">5</b><span>Responde con tus palabras y con ejemplos de tu experiencia. Valoramos el razonamiento, no la redacción perfecta ni la ortografía.</span></li>
+    </ul>
+    <div class="aviso">Es normal sentir algo de nervios con una evaluación así. Por eso, antes de empezar harás una <b>pregunta de práctica que no se califica</b>, para que conozcas cómo funciona.</div>
+    <div class="acciones"><button class="btn" data-ir="consentimiento">Continuar</button></div>
+  </div>
+</div>
+
+<!-- Paso 2: consentimiento -->
+<div id="vista-consentimiento" class="marco oculto">
+  <div class="marca" data-empresa></div>
+  <div class="pasos"><span class="hecho"></span><span class="hecho"></span><span></span><span></span></div>
+  <div class="tarjeta">
+    <h2>Autorización para el tratamiento de tus datos personales</h2>
+    <div class="consent">
+      <p>En cumplimiento de la Ley 1581 de 2012 y el Decreto 1377 de 2013, autorizo de manera previa, expresa e informada a <b data-empresa-txt></b> para recolectar, almacenar, usar y tratar los datos personales que entregue durante esta entrevista, que incluyen: mi nombre, correo electrónico, las respuestas escritas, la <b>grabación de video y audio de mi cámara y micrófono</b> y el registro de eventos de la sesión (por ejemplo, salidas de la ventana o intentos de copiar y pegar).</p>
+      <p><b>Finalidad:</b> evaluar mis conocimientos técnicos y habilidades para la vacante a la que me postulé, verificar la integridad de la prueba y documentar el proceso de selección.</p>
+      <p><b>Uso de inteligencia artificial:</b> entiendo que mis respuestas serán analizadas por un sistema de inteligencia artificial que genera una calificación y una recomendación. Esa recomendación es un apoyo: la decisión sobre mi proceso la toma una persona del equipo de selección.</p>
+      <p><b>Datos sensibles:</b> la imagen y la voz pueden considerarse datos sensibles. No estoy obligado(a) a autorizar su tratamiento; sin embargo, la grabación es un requisito de esta modalidad de entrevista. Si no deseo ser grabado(a), puedo solicitar al equipo de selección una alternativa.</p>
+      <p><b>Mis derechos:</b> conocer, actualizar, rectificar y suprimir mis datos, revocar esta autorización y presentar quejas ante la Superintendencia de Industria y Comercio. Puedo ejercerlos escribiendo a <span data-contacto></span>.</p>
+      <p data-politica-p class="oculto">Consulta la política de tratamiento de datos en <a data-politica target="_blank" rel="noopener">este enlace</a>.</p>
+    </div>
+    <label class="check"><input type="checkbox" id="acepto"> <span>He leído y autorizo el tratamiento de mis datos personales, incluida la grabación de video y audio, para los fines descritos.</span></label>
+    <div class="acciones">
+      <button class="btn secundario" data-ir="bienvenida">Atrás</button>
+      <button class="btn" id="btn-consentir" disabled>Autorizo y continúo</button>
+    </div>
+  </div>
+</div>
+
+<!-- Paso 3: verificación de equipo -->
+<div id="vista-equipo" class="marco oculto">
+  <div class="marca" data-empresa></div>
+  <div class="pasos"><span class="hecho"></span><span class="hecho"></span><span class="hecho"></span><span></span></div>
+  <div class="tarjeta">
+    <h2>Revisemos tu cámara y tu equipo</h2>
+    <p class="suave">Tu navegador te pedirá permiso para usar la cámara y el micrófono. Selecciona <b>Permitir</b>.</p>
+    <div class="camara-prueba">
+      <video id="video-prueba" autoplay muted playsinline></video>
+      <div>
+        <ul class="verif">
+          <li id="v-navegador">Navegador compatible</li>
+          <li id="v-camara">Cámara y micrófono activos</li>
+          <li id="v-pantallas">Una sola pantalla conectada</li>
+          <li id="v-pantalla-completa">Pantalla completa disponible</li>
+        </ul>
+        <p id="equipo-msg" class="tenue" style="margin-top:14px"></p>
+      </div>
+    </div>
+    <div class="acciones">
+      <button class="btn secundario" id="btn-reintentar-equipo">Volver a revisar</button>
+      <button class="btn" id="btn-a-practica" disabled>Ir a la pregunta de práctica</button>
+    </div>
+  </div>
+</div>
+
+<!-- Paso 4: práctica -->
+<div id="vista-practica" class="marco oculto">
+  <div class="marca" data-empresa></div>
+  <div class="pasos"><span class="hecho"></span><span class="hecho"></span><span class="hecho"></span><span class="hecho"></span></div>
+  <div class="tarjeta">
+    <span class="insignia ambar">Práctica · no se califica ni se guarda</span>
+    <p class="pregunta">Cuéntanos en pocas líneas qué te motivó a postularte a esta vacante.</p>
+    <textarea id="practica-texto" class="respuesta" style="min-height:140px" placeholder="Escribe aquí tu respuesta…"></textarea>
+    <p id="practica-aviso" class="aviso ambar oculto" style="margin-top:10px">Pegar texto está deshabilitado. En la entrevista real, cada intento queda registrado como incidencia.</p>
+    <p class="tenue" style="margin-top:8px">Así se verán las preguntas reales. Prueba a escribir: verás que pegar texto está deshabilitado. En la prueba real habrá un reloj por pregunta y tu respuesta se enviará al pulsar «Enviar y continuar» o al acabarse el tiempo.</p>
+    <div class="aviso ambar" style="margin-top:16px">Cuando pulses <b>Comenzar la entrevista</b>, la ventana pasará a pantalla completa, empezará la grabación y correrá el tiempo de la primera pregunta. Ya no podrás pausar.</div>
+    <div class="acciones">
+      <button class="btn" id="btn-comenzar">Comenzar la entrevista</button>
+    </div>
+  </div>
+</div>
+
+<!-- Reanudar tras recarga -->
+<div id="vista-reanudar" class="marco oculto">
+  <div class="tarjeta">
+    <h2>Tu entrevista está en curso</h2>
+    <p class="suave">Saliste de la página mientras respondías. El tiempo siguió corriendo y la reapertura quedará registrada como una incidencia.</p>
+    <p>Incidencias hasta ahora: <b data-incidencias></b> de <b data-max></b>.</p>
+    <video id="video-reanudar" autoplay muted playsinline style="width:200px;border-radius:8px;background:#111;transform:scaleX(-1)"></video>
+    <p id="reanudar-msg" class="tenue"></p>
+    <div class="acciones"><button class="btn" id="btn-reanudar" disabled>Reanudar en pantalla completa</button></div>
+  </div>
+</div>
+
+<!-- Entrevista -->
+<div id="vista-entrevista" class="oculto">
+  <div class="barra">
+    <div class="barra-int">
+      <div class="progreso">
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          <b id="e-numero"></b>
+          <span id="e-tipo" class="insignia"></span>
+          <span id="e-incid" class="insignia"></span>
+        </div>
+        <div class="riel"><i id="e-riel"></i></div>
+      </div>
+      <div id="e-reloj" class="reloj">--:--</div>
+    </div>
+  </div>
+  <div class="zona">
+    <p id="e-pregunta" class="pregunta"></p>
+    <textarea id="e-respuesta" class="respuesta" spellcheck="true" autocomplete="off" placeholder="Escribe aquí tu respuesta…"></textarea>
+    <div class="pie-resp">
+      <span class="tenue"><span id="e-palabras">0</span> palabras · Tu respuesta se guarda al enviarla.</span>
+      <button class="btn" id="btn-enviar">Enviar y continuar</button>
+    </div>
+  </div>
+  <video id="video-mini" class="mini-cam" autoplay muted playsinline></video>
+  <span class="rec">Grabando</span>
+</div>
+
+<!-- Velo: volver a pantalla completa / confirmaciones -->
+<div id="velo-pc" class="velo oculto">
+  <div class="tarjeta">
+    <h2>Regresa a la entrevista</h2>
+    <p id="velo-pc-texto" class="suave">Saliste de la pantalla completa o de la ventana. Esto quedó registrado como incidencia.</p>
+    <p>Incidencias: <b data-incidencias></b> de <b data-max></b>.</p>
+    <button class="btn" id="btn-volver-pc">Volver a pantalla completa</button>
+  </div>
+</div>
+<div id="velo-confirmar" class="velo oculto">
+  <div class="tarjeta">
+    <h2>¿Enviar esta respuesta?</h2>
+    <p class="suave">No podrás volver a esta pregunta.</p>
+    <div class="acciones" style="justify-content:center">
+      <button class="btn secundario" id="btn-conf-no">Seguir escribiendo</button>
+      <button class="btn" id="btn-conf-si">Sí, enviar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Final -->
+<div id="vista-fin" class="marco oculto">
+  <div class="tarjeta">
+    <h1 id="fin-titulo">¡Terminaste! Gracias por tu tiempo</h1>
+    <p id="fin-texto" class="suave">Tus respuestas quedaron registradas. El equipo de selección revisará los resultados y se comunicará contigo.</p>
+    <p id="fin-subida" class="tenue"></p>
+    <div id="fin-no-cerrar" class="aviso ambar oculto">No cierres esta ventana hasta que termine de subir la grabación.</div>
+  </div>
+</div>
+
+<script>
+// Página del candidato (GitHub Pages) — se comunica con el servicio de Apps Script.
+(() => {
+  'use strict';
+
+  const params = new URLSearchParams(location.search);
+  const TOKEN = params.get('t') || '';
+  const API = params.get('api') || (params.get('s') ? `https://script.google.com/macros/s/${params.get('s')}/exec` : '');
+  const $ = (s) => document.querySelector(s);
+  const $$ = (s) => document.querySelectorAll(s);
+
+  let info = null;
+  let stream = null;
+  let grabador = null;
+  let trozos = [];
+  let segmento = null;
+  let reanudada = false;
+  const colaVideos = [];
+  let subiendo = false;
+  let activo = false;
+  let ultimoIncidente = 0;
+  let enviando = false;
+  let limiteMs = 0;
+  let relojId = null;
+  let largoPrevio = 0;
+
+  // ---------------- comunicación ----------------
+
+  async function api(accion, extra) {
+    const cuerpo = JSON.stringify(Object.assign({ accion, t: TOKEN }, extra || {}));
+    // Sin encabezados personalizados: así la solicitud es "simple" y Apps Script la acepta desde otro dominio.
+    const r = await fetch(API, { method: 'POST', body: cuerpo, redirect: 'follow' });
+    const d = await r.json().catch(() => ({ error: 'No se pudo conectar. Revisa tu internet e intenta de nuevo.' }));
+    if (d.error) throw new Error(d.error);
+    return d;
+  }
+
+  function mostrar(id) {
+    $$('body > div[id^="vista-"]').forEach((v) => v.classList.toggle('oculto', v.id !== `vista-${id}`));
+    window.scrollTo(0, 0);
+  }
+
+  function error(msg) {
+    $('#error-texto').textContent = msg;
+    mostrar('error');
+  }
+
+  function cargando(boton, si, texto) {
+    boton.disabled = si;
+    if (si) {
+      boton.dataset.texto = boton.textContent;
+      boton.innerHTML = `<span class="girando"></span>&nbsp; ${texto || 'Un momento…'}`;
+    } else if (boton.dataset.texto) {
+      boton.textContent = boton.dataset.texto;
+    }
+  }
+
+  function pintarDatos() {
+    const set = (sel, v) => $$(sel).forEach((el) => (el.textContent = v));
+    document.title = `Entrevista técnica · ${info.empresa}`;
+    set('[data-empresa]', info.empresa);
+    set('[data-empresa-txt]', info.empresa);
+    set('[data-candidato]', String(info.candidato).split(' ')[0]);
+    set('[data-vacante]', info.vacante);
+    set('[data-total]', info.totalPreguntas);
+    set('[data-tecnicas]', info.tecnicas);
+    set('[data-blandas]', info.blandas);
+    set('[data-min-tec]', info.minutosTecnica);
+    set('[data-min-bla]', info.minutosBlanda);
+    set('[data-max]', info.maxIncidencias);
+    set('[data-incidencias]', info.incidencias);
+    set('[data-contacto]', info.correoContactoDatos || 'el correo del equipo de selección');
+    if (info.politicaDatosUrl) {
+      $('[data-politica]').href = info.politicaDatosUrl;
+      $('[data-politica-p]').classList.remove('oculto');
+    }
+  }
+
+  const enPantallaCompleta = () => !!document.fullscreenElement;
+  async function pedirPantallaCompleta() {
+    try { await document.documentElement.requestFullscreen({ navigationUI: 'hide' }); } catch (e) { /* rechazada */ }
+    return enPantallaCompleta();
+  }
+
+  function tipoVideo() {
+    const opciones = ['video/webm;codecs=vp8,opus', 'video/webm;codecs=vp9,opus', 'video/webm'];
+    return window.MediaRecorder ? opciones.find((t) => MediaRecorder.isTypeSupported(t)) : null;
+  }
+
+  async function encenderCamara(videoEl) {
+    if (!stream || stream.getVideoTracks().every((t) => t.readyState === 'ended')) {
+      stream = await navigator.mediaDevices.getUserMedia({
+        video: { width: { ideal: 480 }, height: { ideal: 360 }, frameRate: { ideal: 12 } },
+        audio: { echoCancellation: true, noiseSuppression: true },
+      });
+      stream.getTracks().forEach((t) => t.addEventListener('ended', () => activo && incidente('camara_detenida', t.kind)));
+    }
+    if (videoEl) videoEl.srcObject = stream;
+    return stream;
+  }
+
+  // ---------------- inicio ----------------
+
+  async function cargar() {
+    if (!TOKEN || !API) return error('El enlace de la entrevista está incompleto. Ábrelo de nuevo desde el correo de invitación.');
+    try {
+      info = await api('obtener');
+    } catch (e) {
+      return error(e.message);
+    }
+    pintarDatos();
+    if (info.estado === 'Invitada') {
+      if (!info.consentimiento) return mostrar('bienvenida');
+      mostrar('equipo');
+      return revisarEquipo();
+    }
+    if (info.estado === 'En curso') return prepararReanudar();
+    if (info.estado === 'Invalidada') return finalInvalidada();
+    if (info.estado === 'Finalizada') return finalNormal(false);
+    return error('Esta entrevista ya fue cerrada. Si crees que es un error, comunícate con el equipo de selección.');
+  }
+
+  $$('[data-ir]').forEach((b) => b.addEventListener('click', () => mostrar(b.dataset.ir)));
+
+  $('#acepto').addEventListener('change', (e) => ($('#btn-consentir').disabled = !e.target.checked));
+  $('#btn-consentir').addEventListener('click', async (e) => {
+    const b = e.currentTarget;
+    cargando(b, true);
+    try {
+      info = await api('consentir', { acepta: true, navegador: navigator.userAgent });
+      mostrar('equipo');
+      revisarEquipo();
+    } catch (err) {
+      alert(err.message);
+    }
+    cargando(b, false);
+  });
+
+  // ---------------- verificación de equipo ----------------
+
+  function marcar(id, ok, texto) {
+    const li = $(id);
+    li.classList.toggle('ok', ok === true);
+    li.classList.toggle('mal', ok === false);
+    if (texto) li.textContent = texto;
+  }
+
+  async function revisarEquipo() {
+    const movil = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    const navOk = !!tipoVideo() && !!document.documentElement.requestFullscreen && !movil;
+    marcar('#v-navegador', navOk, navOk ? 'Navegador compatible' : 'Usa Google Chrome o Microsoft Edge en un computador');
+
+    let camOk = false;
+    try {
+      await encenderCamara($('#video-prueba'));
+      camOk = stream.getVideoTracks().length > 0 && stream.getAudioTracks().length > 0;
+    } catch (e) {
+      camOk = false;
+    }
+    marcar('#v-camara', camOk, camOk ? 'Cámara y micrófono activos' : 'No pudimos acceder a la cámara o al micrófono. Revisa los permisos del navegador (ícono del candado junto a la dirección).');
+
+    const extendida = window.screen.isExtended === true;
+    marcar('#v-pantallas', !extendida, extendida ? 'Detectamos más de una pantalla: desconecta las adicionales' : 'Una sola pantalla conectada');
+    marcar('#v-pantalla-completa', !!document.fullscreenEnabled, document.fullscreenEnabled ? 'Pantalla completa disponible' : 'Tu navegador no permite pantalla completa');
+
+    const listo = navOk && camOk && document.fullscreenEnabled;
+    $('#btn-a-practica').disabled = !listo;
+    $('#equipo-msg').textContent = extendida && listo
+      ? 'Puedes continuar, pero si sigues con más de una pantalla conectada quedará registrado como incidencia.'
+      : listo ? 'Todo listo.' : 'Corrige los puntos marcados y pulsa «Volver a revisar».';
+  }
+
+  $('#btn-reintentar-equipo').addEventListener('click', revisarEquipo);
+  $('#btn-a-practica').addEventListener('click', () => mostrar('practica'));
+  $('#practica-texto').addEventListener('paste', (e) => {
+    e.preventDefault();
+    $('#practica-aviso').classList.remove('oculto');
+  });
+
+  $('#btn-comenzar').addEventListener('click', async (e) => {
+    const b = e.currentTarget;
+    if (!(await pedirPantallaCompleta())) {
+      alert('Necesitamos la pantalla completa para comenzar. Intenta de nuevo y acepta el cambio a pantalla completa.');
+      return;
+    }
+    cargando(b, true, 'Iniciando…');
+    try {
+      info = await api('iniciar');
+      comenzarEntrevista();
+      if (window.screen.isExtended === true) incidente('multiples_pantallas', 'al iniciar');
+    } catch (err) {
+      alert(err.message);
+    }
+    cargando(b, false);
+  });
+
+  // ---------------- reanudar ----------------
+
+  async function prepararReanudar() {
+    mostrar('reanudar');
+    try {
+      await encenderCamara($('#video-reanudar'));
+      $('#btn-reanudar').disabled = false;
+    } catch (e) {
+      $('#reanudar-msg').textContent = 'Permite el acceso a la cámara y al micrófono y recarga la página.';
+    }
+  }
+
+  $('#btn-reanudar').addEventListener('click', async (e) => {
+    const b = e.currentTarget;
+    if (!(await pedirPantallaCompleta())) return;
+    cargando(b, true, 'Reanudando…');
+    try {
+      info = await api('iniciar');
+      reanudada = true;
+      if (info.estado === 'Invalidada') return finalInvalidada();
+      comenzarEntrevista();
+    } catch (err) {
+      alert(err.message);
+    }
+    cargando(b, false);
+  });
+
+  // ---------------- entrevista ----------------
+
+  function comenzarEntrevista() {
+    document.body.classList.add('en-entrevista');
+    mostrar('entrevista');
+    $('#video-mini').srcObject = stream;
+    pintarPregunta();
+    setTimeout(() => (activo = true), 1200);
+  }
+
+  function pintarPregunta() {
+    const p = info.pregunta;
+    if (!p) return;
+    nuevoSegmento(p.numero);
+    $('#e-numero').textContent = `Pregunta ${p.numero} de ${info.totalPreguntas}`;
+    const tipo = $('#e-tipo');
+    tipo.textContent = p.tipo === 'tecnica' ? 'Técnica' : 'Habilidades blandas';
+    tipo.className = `insignia ${p.tipo === 'tecnica' ? 'azul' : 'verde'}`;
+    $('#e-riel').style.width = `${((p.numero - 1) / info.totalPreguntas) * 100}%`;
+    $('#e-pregunta').textContent = p.texto;
+    const ta = $('#e-respuesta');
+    ta.value = '';
+    ta.disabled = false;
+    largoPrevio = 0;
+    $('#e-palabras').textContent = '0';
+    pintarIncidencias();
+    limiteMs = Date.now() + p.segundosRestantes * 1000;
+    clearInterval(relojId);
+    relojId = setInterval(tic, 250);
+    tic();
+    enviando = false;
+    cargando($('#btn-enviar'), false);
+    ta.focus();
+  }
+
+  function pintarIncidencias() {
+    const el = $('#e-incid');
+    el.textContent = `Incidencias ${info.incidencias}/${info.maxIncidencias}`;
+    el.className = `insignia ${info.incidencias === 0 ? '' : info.incidencias >= info.maxIncidencias ? 'roja' : 'ambar'}`;
+    $$('[data-incidencias]').forEach((x) => (x.textContent = info.incidencias));
+  }
+
+  function tic() {
+    const resta = Math.max(0, Math.round((limiteMs - Date.now()) / 1000));
+    const reloj = $('#e-reloj');
+    reloj.textContent = `${String(Math.floor(resta / 60)).padStart(2, '0')}:${String(resta % 60).padStart(2, '0')}`;
+    reloj.className = `reloj${resta <= 30 ? ' critico' : resta <= 90 ? ' poco' : ''}`;
+    if (resta === 0 && !enviando) enviarRespuesta();
+  }
+
+  $('#e-respuesta').addEventListener('input', (e) => {
+    const ta = e.target;
+    const delta = ta.value.length - largoPrevio;
+    if (activo && delta > 80 && e.inputType !== 'insertFromPaste') incidente('texto_insertado', `${delta} caracteres de una vez`);
+    largoPrevio = ta.value.length;
+    $('#e-palabras').textContent = ta.value.trim() ? ta.value.trim().split(/\s+/).length : 0;
+  });
+
+  // Diálogo propio (no confirm()) para no sacar el foco de la ventana.
+  $('#btn-enviar').addEventListener('click', () => {
+    const vacia = !$('#e-respuesta').value.trim();
+    $('#velo-confirmar h2').textContent = vacia ? 'Tu respuesta está vacía. ¿Enviarla así?' : '¿Enviar esta respuesta?';
+    $('#velo-confirmar').classList.remove('oculto');
+  });
+  $('#btn-conf-no').addEventListener('click', () => $('#velo-confirmar').classList.add('oculto'));
+  $('#btn-conf-si').addEventListener('click', () => {
+    $('#velo-confirmar').classList.add('oculto');
+    enviarRespuesta();
+  });
+
+  async function enviarRespuesta() {
+    if (enviando || !info.pregunta) return;
+    enviando = true;
+    clearInterval(relojId);
+    $('#velo-confirmar').classList.add('oculto');
+    $('#e-respuesta').disabled = true;
+    cargando($('#btn-enviar'), true, 'Enviando…');
+    const datos = { preguntaId: info.pregunta.id, texto: $('#e-respuesta').value };
+    for (let intento = 1; ; intento++) {
+      try {
+        info = await api('responder', datos);
+        break;
+      } catch (e) {
+        if (intento % 5 === 0) alert('No pudimos enviar tu respuesta por un problema de conexión. Revisa tu internet; seguiremos intentando.');
+        await new Promise((ok) => setTimeout(ok, 1500 * Math.min(intento, 5)));
+      }
+    }
+    if (info.estado === 'En curso') return pintarPregunta();
+    if (info.estado === 'Invalidada') return finalInvalidada();
+    return finalNormal(true);
+  }
+
+  // ---------------- controles de integridad ----------------
+
+  async function incidente(tipo, detalle) {
+    if (!activo) return;
+    const ahora = Date.now();
+    if (ahora - ultimoIncidente < 3000) return; // un mismo cambio de ventana dispara varios eventos
+    ultimoIncidente = ahora;
+    try {
+      const r = await api('incidente', { tipo, detalle: detalle || '' });
+      info.incidencias = r.incidencias;
+      info.estado = r.estado;
+      pintarIncidencias();
+      if (r.estado === 'Invalidada') finalInvalidada();
+    } catch (e) { /* si falla la red, la grabación sigue siendo evidencia */ }
+  }
+
+  function mostrarVelo(texto) {
+    if (!activo) return;
+    $('#velo-pc-texto').textContent = texto;
+    $('#velo-pc').classList.remove('oculto');
+  }
+
+  document.addEventListener('visibilitychange', () => document.hidden && incidente('pestana_oculta'));
+  window.addEventListener('blur', () => {
+    incidente('ventana_sin_foco');
+    mostrarVelo('La ventana de la entrevista perdió el foco (cambiaste a otra aplicación o ventana). Esto quedó registrado como incidencia.');
+  });
+  document.addEventListener('fullscreenchange', () => {
+    if (!enPantallaCompleta()) {
+      incidente('salio_pantalla_completa');
+      mostrarVelo('Saliste de la pantalla completa. Esto quedó registrado como incidencia.');
+    }
+  });
+  $('#btn-volver-pc').addEventListener('click', async () => {
+    if (await pedirPantallaCompleta()) {
+      $('#velo-pc').classList.add('oculto');
+      $('#e-respuesta').focus();
+    }
+  });
+  ['copy', 'cut'].forEach((ev) => document.addEventListener(ev, (e) => {
+    if (!activo) return;
+    e.preventDefault();
+    incidente('copiar_bloqueado');
+  }));
+  document.addEventListener('paste', (e) => {
+    if (!activo) return;
+    e.preventDefault();
+    incidente('pegar_bloqueado');
+  });
+  document.addEventListener('drop', (e) => activo && e.preventDefault());
+  document.addEventListener('contextmenu', (e) => activo && e.preventDefault());
+  // Al recargar o cerrar no se cuenta «salió de la pestaña»: la reapertura ya se registra como una incidencia.
+  window.addEventListener('pagehide', () => (activo = false));
+  window.addEventListener('beforeunload', (e) => {
+    if (activo || colaVideos.length || subiendo) {
+      e.preventDefault();
+      e.returnValue = '';
+    }
+  });
+
+  // ---------------- grabación: un video por pregunta ----------------
+
+  function nuevoSegmento(numero) {
+    cerrarSegmento();
+    segmento = `P${String(numero).padStart(2, '0')}${reanudada ? '-reanudada-' + (Date.now() % 100000) : ''}`;
+    reanudada = false;
+    trozos = [];
+    try {
+      grabador = new MediaRecorder(stream, { mimeType: tipoVideo(), videoBitsPerSecond: 110000, audioBitsPerSecond: 32000 });
+      const mios = trozos;
+      grabador.ondataavailable = (e) => e.data && e.data.size && mios.push(e.data);
+      grabador.start(5000);
+    } catch (e) {
+      grabador = null;
+    }
+  }
+
+  function cerrarSegmento() {
+    return new Promise((ok) => {
+      if (!grabador || grabador.state === 'inactive') return ok();
+      const g = grabador;
+      const partes = trozos;
+      const seg = segmento;
+      grabador = null;
+      g.onstop = () => {
+        if (partes.length) {
+          colaVideos.push({ seg, blob: new Blob(partes, { type: 'video/webm' }) });
+          subirVideos();
+        }
+        ok();
+      };
+      g.stop();
+    });
+  }
+
+  function aBase64(blob) {
+    return new Promise((ok, mal) => {
+      const lector = new FileReader();
+      lector.onload = () => ok(String(lector.result).split(',')[1] || '');
+      lector.onerror = mal;
+      lector.readAsDataURL(blob);
+    });
+  }
+
+  async function subirVideos() {
+    if (subiendo) return;
+    subiendo = true;
+    while (colaVideos.length) {
+      const v = colaVideos[0];
+      actualizarTextoSubida();
+      const datos = await aBase64(v.blob);
+      for (let intento = 1; intento <= 6; intento++) {
+        try {
+          await api('video', { seg: v.seg, datos });
+          break;
+        } catch (e) {
+          if (/no está recibiendo/.test(e.message)) break;
+          await new Promise((r) => setTimeout(r, 2000 * intento));
+        }
+      }
+      colaVideos.shift();
+    }
+    subiendo = false;
+    actualizarTextoSubida();
+  }
+
+  function actualizarTextoSubida() {
+    const el = $('#fin-subida');
+    if (el && !$('#vista-fin').classList.contains('oculto')) {
+      el.textContent = colaVideos.length ? `Subiendo la grabación… quedan ${colaVideos.length} parte(s).` : '';
+    }
+  }
+
+  // ---------------- cierre ----------------
+
+  async function cerrar() {
+    activo = false;
+    clearInterval(relojId);
+    document.body.classList.remove('en-entrevista');
+    $('#velo-pc').classList.add('oculto');
+    $('#velo-confirmar').classList.add('oculto');
+    if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+    mostrar('fin');
+    $('#fin-no-cerrar').classList.remove('oculto');
+    await cerrarSegmento();
+    if (stream) stream.getTracks().forEach((t) => t.stop());
+    const limite = Date.now() + 5 * 60000;
+    while ((colaVideos.length || subiendo) && Date.now() < limite) {
+      actualizarTextoSubida();
+      await new Promise((r) => setTimeout(r, 500));
+    }
+    $('#fin-no-cerrar').classList.add('oculto');
+    $('#fin-subida').textContent = 'Listo. Ya puedes cerrar esta ventana.';
+    api('finalizar').catch(() => {});
+  }
+
+  function finalNormal(recienTerminada) {
+    $('#fin-titulo').textContent = '¡Terminaste! Gracias por tu tiempo';
+    $('#fin-texto').textContent = 'Tus respuestas quedaron registradas. El equipo de selección revisará los resultados y se comunicará contigo.';
+    if (recienTerminada) return cerrar();
+    mostrar('fin');
+  }
+
+  function finalInvalidada() {
+    $('#fin-titulo').textContent = 'La entrevista se cerró';
+    $('#fin-texto').textContent = `Se superó el número máximo de incidencias permitidas (${info.maxIncidencias}), por lo que la sesión quedó anulada. Una persona del equipo de selección revisará el caso y se comunicará contigo.`;
+    if (activo || grabador) return cerrar();
+    mostrar('fin');
+  }
+
+  cargar();
+})();
+</script>
+</body>
+</html>
